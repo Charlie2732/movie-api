@@ -1,6 +1,15 @@
 @movie_api_HostAddress = http://localhost:5215
 
-GET {{movie_api_HostAddress}}/weatherforecast/
+POST {{movie_api_HostAddress}}/api/movies
+Content-Type: application/json
+
+{
+  "title": "Inception"
+}
+
+###
+
+GET {{movie_api_HostAddress}}/api/movies
 Accept: application/json
 
 ###
