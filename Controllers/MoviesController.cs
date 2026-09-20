@@ -51,4 +51,27 @@ public class MoviesController : ControllerBase
         if (!success) return NotFound();
         return NoContent();
     }
+
+    [HttpPost("{id}/upload")]
+    public async Task<IActionResult> UploadImage(int id, IFormFile file)
+    {
+        var movie = _service.GetById(id);
+        if (movie is null) return NotFound();
+
+        var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
+        Directory.CreateDirectory(uploadsFolder);
+
+        var fileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
+        var filePath = Path.Combine(uploadsFolder, fileName);
+
+        using (var stream = new FileStream(filePath, FileMode.Create))
+        {
+            await file.CopyToAsync(stream);
+        }
+
+        movie.ImagePath = $"/uploads/{fileName}";
+        _service.Update(id, movie);
+
+        return Ok(movie);
+    }
 }

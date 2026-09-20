@@ -40,6 +40,7 @@ public class MovieService : IMovieService
         if (movie is null) return false;
 
         movie.Title = updated.Title;
+        movie.ImagePath = updated.ImagePath;
         _context.SaveChanges();
         return true;
     }
